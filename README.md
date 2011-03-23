@@ -1,4 +1,4 @@
-# jQuery Placeholder
+# jQuery Wizard
 
 ## About
 
@@ -58,8 +58,8 @@ The wizard may be customized by passing an object with any of the following prop
 * `initial_step` - An integer describing which step the wizard should display initially.
 * `labels.next_step` - A string describing what the 'next step'-button should read (defaults to 'Next step').
 * `labels.previous_step` - A string describing what the 'previous step'-button should read (defaults to 'Previous step').
-* `animations.next` - A function that defines how the 'next' animation should look. The function is passed two parameters; the current fieldset and the next fieldset.
-* `animations.previous` - A function that defines how the 'previous' animation should look. The function is passed two parameters; the current fieldset and the previous fieldset.
+* `animations.next` - A function that defines the 'next' animation. The function is passed two parameters; the current fieldset and the next fieldset.
+* `animations.previous` - A function that defines the 'previous' animation. The function is passed two parameters; the current fieldset and the previous fieldset.
 
 #### Example
 
