@@ -61,6 +61,7 @@ The wizard may be customized by passing an object with any of the following prop
 * `animations.next` - A function that defines how the 'next' animation should look. The function is passed two parameters; the current fieldset and the next fieldset.
 * `animations.previous` - A function that defines how the 'previous' animation should look. The function is passed two parameters; the current fieldset and the previous fieldset.
 
+#### Example
 
     $('form).wizard({
         labels: {
