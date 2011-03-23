@@ -55,13 +55,11 @@ jQuery Wizard turns your forms into beautiful wizards without cluttering your ma
 
 The wizard may be customized by passing an object with any of the following properties to the `wizard()` function.
 
-`initial_step` - An integer describing which step the wizard should display initially.
-`labels.next_step` - A string describing what the 'next step'-button should read (defaults to 'Next step').
-`labels.previous_step` - A string describing what the 'previous step'-button should read (defaults to 'Previous step').
-`animations.next` - A function that defines how the 'next' animation should look. The function is passed two parameters; the current fieldset and the next fieldset.
-`animations.previous` - A function that defines how the 'previous' animation should look. The function is passed two parameters; the current fieldset and the previous fieldset.
-
-### Example
+* `initial_step` - An integer describing which step the wizard should display initially.
+* `labels.next_step` - A string describing what the 'next step'-button should read (defaults to 'Next step').
+* `labels.previous_step` - A string describing what the 'previous step'-button should read (defaults to 'Previous step').
+* `animations.next` - A function that defines how the 'next' animation should look. The function is passed two parameters; the current fieldset and the next fieldset.
+* `animations.previous` - A function that defines how the 'previous' animation should look. The function is passed two parameters; the current fieldset and the previous fieldset.
 
     $('form).wizard({
         labels: {
