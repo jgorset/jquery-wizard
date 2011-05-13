@@ -7,12 +7,12 @@
             
             // Default options
             options                         = options || {}
-            options.initial_step            = options.initial_step || 1
+            options.initial_step            = options.initial_step || 1
             options.labels                  = options.labels || {}
             options.labels.next_step        = options.labels.next_step || 'Next step'
             options.labels.previous_step    = options.labels.previous_step || 'Previous step'
             options.animations              = options.animations || {}
-            options.animations.next         = options.animations.next || animate
+            options.animations.next         = options.animations.next || animate
             options.animations.previous     = options.animations.previous || animate
             
             
