@@ -104,16 +104,16 @@
                 $previous_fieldset = $current_fieldset.prev('fieldset')
                 
                 if($previous_fieldset.length){
-                    $(self).find('#previous_step').show()
+                    $(self).find('#previous_step').attr('disabled', false)
                 }else{
-                    $(self).find('#previous_step').hide()
+                    $(self).find('#previous_step').attr('disabled', true)
                 }
                 
                 if($next_fieldset.length){
-                    $(self).find('#next_step').show()
+                    $(self).find('#next_step').attr('disabled', false)
                     $(self).find('input[type=submit]').hide()
                 }else{
-                    $(self).find('#next_step').hide()
+                    $(self).find('#next_step').attr('disabled', true)
                     $(self).find('input[type=submit]').show()
                 }
             
