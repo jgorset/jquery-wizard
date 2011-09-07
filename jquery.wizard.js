@@ -120,8 +120,9 @@
             }
             
             function synchronize_steps(){
+                $(self).find('#steps .step').removeClass('completed')
                 $(self).find('#steps .step.current').removeClass('current')
-                $(self).find('#steps .step:eq(' + $fieldsets.index($current_fieldset) + ')').addClass('current')
+                $(self).find('#steps .step:eq(' + $fieldsets.index($current_fieldset) + ')').addClass('current').prevAll().addClass('completed')
             }
             
             initialize()
