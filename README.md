@@ -55,27 +55,30 @@ jQuery Wizard turns your forms into beautiful wizards without cluttering your ma
 
 The wizard may be customized by passing an object with any of the following properties to the `wizard()` function.
 
-* `initial_step` - An integer describing which step the wizard should display initially.
-* `labels.next_step` - A string describing what the 'next step'-button should read (defaults to 'Next step').
-* `labels.previous_step` - A string describing what the 'previous step'-button should read (defaults to 'Previous step').
-* `animations.next` - A function that defines the 'next' animation. The function is passed two parameters; the current fieldset and the next fieldset.
-* `animations.previous` - A function that defines the 'previous' animation. The function is passed two parameters; the current fieldset and the previous fieldset.
+* `element` - A string or element describing the element to be paged. Defaults to 'fieldset'.
+* `initialStep` - An integer describing which step the wizard should display initially. Defaults to 1.
+* `labels` - An object with properties `next` and `previous`, whose values should be strings describing what the labels
+  of the next and previous-buttons should read, respectively. Defaults to 'Next' and 'Previous'.
+* `animations` - An object with properties `next` and `previous`, whose values should be functions describing the
+  transitions between steps. These functions are passed two arguments; the element being hidden, and the element
+  being shown.
 
 #### Example
 
     $('form).wizard({
+        initialStep: 2,
         labels: {
-            next_step: 'Next',
-            previous_step: 'Previous'
+            next: "I'm done, let's go!",
+            previous: "Wait a minute..."
         },
         animations: {
-            next: function(old_fieldset, new_fieldset){
-                old_fieldset.hide()
-                new_fieldset.show()
+            next: function(x, y){
+                $(x).hide()
+                $(y).show()
             },
-            previous: function(old_fieldset, new_fieldset){
-                old_fieldset.hide()
-                new_fieldset.show()
+            previous: function(x, y){
+                $(x).hide()
+                $(y).show()
             }
         }
     })

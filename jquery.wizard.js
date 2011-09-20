@@ -1,131 +1,114 @@
 (function($){
-    
+
     jQuery.fn.wizard = function(options){
-        
-        return this.each(function(){
-            var self = this
+
+        options = $.extend({
+            element: 'fieldset',
+            initialStep: 1,
+            labels: {
+                next: 'Next',
+                previous: 'Previous'
+            },
+            animations: {
+                next: function(x, y){
+                    x.hide()
+                    y.show()
+                },
+                previous: function(x, y){
+                    x.hide()
+                    y.show()
+                }
+            }
+        }, options)
+
+        return this.each(function(index, form){
+            var form = $(form)
             
-            // Default options
-            options                         = options || {}
-            options.initial_step            = options.initial_step || 1
-            options.labels                  = options.labels || {}
-            options.labels.next_step        = options.labels.next_step || 'Next step'
-            options.labels.previous_step    = options.labels.previous_step || 'Previous step'
-            options.animations              = options.animations || {}
-            options.animations.next         = options.animations.next || animate
-            options.animations.previous     = options.animations.previous || animate
+            var steps = $(options.element, form)
+            var currentStep = steps.eq(options.initialStep - 1)
             
+            steps.hide()
+            currentStep.show()
             
-            var $fieldsets = $(this).children('fieldset')
-            var $current_fieldset = $fieldsets.eq(options.initial_step - 1)
-            
-            function initialize(){
-                
-                $(self).find('input[type=submit]').before(
-                    $('<input />', {
-                        'type': 'button',
-                        'value': options.labels.previous_step,
-                        'id': 'previous_step',
-                        'click': previous
-                    }),
-                    $('<input />', {
-                        'type': 'button',
-                        'value': options.labels.next_step,
-                        'id': 'next_step',
-                        'click': next
-                    }),
-                    $('<div id="steps" />')
-                )
-                
-                $(self).children('fieldset').each(function(index, element){
-                    
-                    $(self).find('#steps').append(
-                        $('<div />', {
-                            'class': 'step',
-                            'id': 'step_' + (index + 1),
-                            'text': $(element).find('legend').text()
-                        })
-                    )
-                    
+            var elements = {
+                previous: $('<input />', {
+                    'type': 'button',
+                    'value': options.labels.previous,
+                    'class': 'previous',
+                    'click': function(event){
+                        var previousStep = currentStep.prev(options.element)
+
+                        if(previousStep.length > 0){
+                            options.animations.previous(currentStep, previousStep)
+                            currentStep = previousStep
+                        }
+
+                        render()
+                    }
+                }),
+                next: $('<input />', {
+                    'type': 'button',
+                    'value': options.labels.next,
+                    'class': 'next',
+                    'click': function(event){
+                        var nextStep = currentStep.next(options.element)
+
+                        if(nextStep.length > 0){
+                            options.animations.next(currentStep, nextStep)
+                            currentStep = nextStep
+                        }
+
+                        render()
+                    }
+                }),
+                steps: $('<div />', {
+                    'id': 'steps'
                 })
-                
-                $fieldsets.not($current_fieldset).hide()
-                
-                synchronize_navigation()
-                synchronize_steps()
             }
-            
-            function go(target_step){
-                $target_fieldset = $fieldsets.eq(target_step - 1)
-                
-                if($target_fieldset.index() < $current_fieldset.index()){
-                    options.animations.previous($current_fieldset, $target_fieldset)
+
+            form.find('input[type=submit]').before(elements.next, elements.previous, elements.steps)
+
+            $(steps).each(function(index, step){
+                var step = $(step)
+
+                form.find('#steps').append(
+                    $('<div />', {
+                        'id': 'step-' + (index + 1),
+                        'class': 'step',
+                        'text': step.find('legend').text()
+                    })
+                )
+
+            })
+
+            function render(){
+                var previousStep = currentStep.prev(options.element)
+                var nextStep = currentStep.next(options.element)
+
+                if(previousStep.length > 0){
+                    elements.previous.show()
                 }else{
-                    options.animations.next($current_fieldset, $target_fieldset)
-                }
-                
-                $current_fieldset = $target_fieldset
-                
-                synchronize_navigation()
-                synchronize_steps()
-            }
-            
-            function previous(){
-                $previous_fieldset = $current_fieldset.prev('fieldset')
-                
-                if($previous_fieldset){
-                    options.animations.previous($current_fieldset, $previous_fieldset)
-                    $current_fieldset = $previous_fieldset
+                    elements.previous.hide()
                 }
 
-                synchronize_navigation()
-                synchronize_steps()
-            }
-            
-            function next(){
-                $next_fieldset = $current_fieldset.next('fieldset')
-                
-                if($next_fieldset){
-                    options.animations.next($current_fieldset, $next_fieldset)
-                    $current_fieldset = $next_fieldset
+                if(nextStep.length > 0){
+                    elements.next.show()
+                    form.find('input[type=submit]').hide()
+                }else{
+                    elements.next.hide()
+                    form.find('input[type=submit]').show()
                 }
 
-                synchronize_navigation()
-                synchronize_steps()
+
+                elements.steps.find('.step').removeClass('completed')
+                elements.steps.find('.current').removeClass('current')
+                elements.steps.find('.step:eq(' + steps.index(currentStep) + ')').addClass('current')
+                elements.steps.find('.current').prevAll().addClass('completed')
             }
             
-            function animate(old_fieldset, new_fieldset){
-                old_fieldset.hide()
-                new_fieldset.show()
-            }
-            
-            function synchronize_navigation(){
-                $next_fieldset = $current_fieldset.next('fieldset')
-                $previous_fieldset = $current_fieldset.prev('fieldset')
-                
-                if($previous_fieldset.length){
-                    $(self).find('#previous_step').attr('disabled', false)
-                }else{
-                    $(self).find('#previous_step').attr('disabled', true)
-                }
-                
-                if($next_fieldset.length){
-                    $(self).find('#next_step').attr('disabled', false)
-                    $(self).find('input[type=submit]').hide()
-                }else{
-                    $(self).find('#next_step').attr('disabled', true)
-                    $(self).find('input[type=submit]').show()
-                }
-            
-            }
-            
-            function synchronize_steps(){
-                $(self).find('#steps .step.current').removeClass('current')
-                $(self).find('#steps .step:eq(' + $fieldsets.index($current_fieldset) + ')').addClass('current')
-            }
-            
-            initialize()
+            render()
 
         })
     }
+
 })(jQuery)
